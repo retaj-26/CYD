@@ -1,294 +1,132 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SDC — Cyber Defender Challenge</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>SDC Challenge</title>
 
 <style>
-  :root{
-    --bg:#020204;
-    --panel:#091119;
-    --neon-green:#00ff99;
-    --neon-purple:#b07aff;
-    --accent:linear-gradient(90deg,var(--neon-green),var(--neon-purple));
-    --text:#e7faff;
-    --muted:rgba(255,255,255,0.1);
-  }
+    body {
+        background: #0a0a0a;
+        color: #00ffea;
+        font-family: "Courier New", monospace;
+        text-align: center;
+        padding: 40px;
+    }
 
-  *{box-sizing:border-box;}
-  body{
-    margin:0;padding:26px;background:var(--bg);color:var(--text);
-    font-family:'Cairo','Share Tech Mono',monospace;
-    display:flex;align-items:center;justify-content:center;
-  }
+    h1 {
+        color: #00ffd5;
+        margin-bottom: 10px;
+        font-size: 28px;
+        text-shadow: 0 0 10px #00ffd588;
+    }
 
-  .card{
-    width:100%;max-width:980px;padding:24px;border-radius:16px;
-    background:rgba(255,255,255,0.015);
-    border:1px solid rgba(255,255,255,0.04);
-    box-shadow:0 12px 50px rgba(0,255,153,0.05);
-    position:relative;overflow:hidden;
-    backdrop-filter:blur(6px);
-  }
+    .box {
+        background: #111;
+        padding: 25px;
+        border-radius: 15px;
+        border: 1px solid #00ffe1;
+        width: 90%;
+        max-width: 550px;
+        margin: auto;
+        box-shadow: 0 0 25px #00ffe133;
+    }
 
-  #matrixCanvas{
-    position:absolute;inset:0;opacity:0.08;pointer-events:none;
-  }
+    input {
+        width: 95%;
+        padding: 15px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 2px solid #00ffd5;
+        background: #000;
+        color: #00ffea;
+        margin-top: 10px;
+        text-align: center;
+        box-shadow: 0 0 15px #00ffd522;
+    }
 
-  .content{display:flex;gap:22px;z-index:2;position:relative;}
-  .left{flex:1}
-  .right{width:360px}
+    button {
+        margin-top: 15px;
+        padding: 12px 25px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: none;
+        background: #00ffd5;
+        color: #000;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        box-shadow: 0 0 20px #00ffd566;
+    }
 
-  .header{display:flex;gap:14px;margin-bottom:14px;align-items:center}
-  .logo{
-    width:62px;height:62px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    border:1px solid rgba(255,255,255,0.05);
-    background:rgba(255,255,255,0.02);
-    box-shadow:0 6px 26px rgba(0,255,153,0.06);
-  }
-  .logo .text{color:var(--neon-green);font-family:'Share Tech Mono';font-size:15px}
+    button:hover {
+        background: #00a896;
+        color: white;
+        transform: scale(1.05);
+    }
 
-  .console{
-    background:rgba(255,255,255,0.03);
-    padding:16px;border-radius:10px;height:340px;overflow:auto;
-    border:1px solid rgba(255,255,255,0.03);
-    font-size:14px;
-  }
-
-  .console pre{margin:0;white-space:pre-wrap;}
-
-  .input-area{display:flex;gap:10px;margin-top:12px}
-  input[type="text"]{
-    flex:1;padding:12px;border-radius:8px;background:#0006;
-    border:1px solid rgba(255,255,255,0.06);color:var(--text);
-  }
-  .btn{
-    padding:10px 16px;border-radius:8px;border:none;cursor:pointer;
-    background:var(--accent);color:#080d11;font-weight:700;
-    transition:0.15s;
-  }
-  .btn:hover{transform:translateY(-3px)}
-
-  .actions{display:flex;gap:12px;margin-top:16px}
-  .action-btn{
-    padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);
-    border:1px solid var(--muted);cursor:pointer;color:var(--text);min-width:110px;
-    transition:0.15s;
-  }
-  .action-btn:hover{
-    transform:translateY(-4px);
-    box-shadow:0 12px 34px rgba(0,255,153,0.05);
-  }
-
-  .reveal{
-    margin-top:10px;padding:12px;border-radius:8px;
-    background:rgba(255,255,255,0.02);display:none;
-    border:1px solid rgba(255,255,255,0.03);
-    font-family:'Share Tech Mono';
-  }
-
-  .panel{
-    background:rgba(255,255,255,0.015);
-    padding:16px;border-radius:12px;
-    border:1px solid rgba(255,255,255,0.03);
-    height:340px;display:flex;flex-direction:column;gap:12px;
-  }
-
-  .status{
-    background:#0005;padding:12px;border-radius:10px;text-align:center;
-  }
-  .status.success{border:1px solid rgba(0,255,153,0.3)}
-  .status.fail{border:1px solid rgba(255,75,75,0.25)}
-
-  .big{font-size:17px;font-weight:800;color:var(--neon-green)}
-  .small{opacity:0.85;margin-top:6px}
-
-  .meme img{
-    max-width:100%;border-radius:8px;max-height:150px;object-fit:cover;
-  }
-
-  @media(max-width:900px){
-    .content{flex-direction:column}
-    .right{width:100%}
-  }
-
+    .msg {
+        margin-top: 18px;
+        font-size: 19px;
+        min-height: 28px;
+    }
 </style>
 </head>
+
 <body>
 
-<div class="card">
-  <canvas id="matrixCanvas"></canvas>
+<h1>🔐 SDC FLAG CHALLENGE</h1>
 
-  <div class="header">
-    <div class="logo"><div class="text">{SDC}</div></div>
-    <div>
-      <h1>Cyber Defender Challenge</h1>
-      <p style="opacity:.85">أدخل الفلاق الصحيح وورّينا ذكاء السيبر ✨</p>
-    </div>
-  </div>
+<div class="box">
+    <p>اكتب الفلاق الصحيح 👇</p>
 
-  <div class="content">
+    <input id="flagInput" placeholder="SDC{.....}" />
 
-    <!-- left -->
-    <div class="left">
-      <div class="console"><pre id="consoleText">⚠️ الفلاق حساس لحالة الحروف — انتبهي.</pre></div>
+    <button onclick="checkFlag()">تحقّق</button>
 
-      <div class="input-area">
-        <input id="flagInput" placeholder="اكتب الفلاق هنا...">
-        <button id="submitBtn" class="btn">تحقق</button>
-      </div>
-
-      <div class="actions">
-        <button id="showTextBtn" class="action-btn">عرض النص</button>
-        <button id="openWebBtn" class="action-btn">افتح موقع</button>
-        <button id="openImgBtn" class="action-btn">عرض صورة</button>
-      </div>
-
-      <div id="revealText" class="reveal"></div>
-    </div>
-
-    <!-- right -->
-    <aside class="right panel">
-      <div id="statusBox" class="status">
-        <div class="big">جاهزة...</div>
-        <div class="small">أكتبي الفلاق وخلّينا نشوف</div>
-      </div>
-      <div id="memeArea" class="meme"></div>
-      <div style="text-align:center;opacity:.4;margin-top:auto">SDC • تدريب سيبراني ممتع</div>
-    </aside>
-
-  </div>
+    <div id="msg" class="msg"></div>
 </div>
 
-
 <script>
-
 const CONFIG = {
-  FLAG: "SDC{Cyber_DEFENDER_31s}",
-  BUTTON_WEB_URL: "https://retaj-26.github.io/31_web/",
-  BUTTON_IMAGE_URL: "https://imgur.com/a/PTN218S",
-  BUTTON_TEXT_CONTENT: "SDC{Part_2_is_ -.. . ..-. . -. -.. . .-.}",
+    FLAG: "SDC{Cyber_DEFENDER_31s}",
 };
 
+function checkFlag() {
+    const input = document.getElementById("flagInput").value.trim();
+    const msg = document.getElementById("msg");
 
-(function(){
-  const FLAG = CONFIG.FLAG;
-  const input = document.getElementById('flagInput');
-  const btn = document.getElementById('submitBtn');
-  const status = document.getElementById('statusBox');
-  const memeArea = document.getElementById('memeArea');
-  const consoleText = document.getElementById('consoleText');
-  const showTextBtn = document.getElementById('showTextBtn');
-  const openWebBtn = document.getElementById('openWebBtn');
-  const openImgBtn = document.getElementById('openImgBtn');
-  const revealText = document.getElementById('revealText');
-
-  let tries = 0;
-
-  const successMsgs = [
-    {title:"🔥 كفو يا بطلة!", text:"تمام عليك! هذا هو الفلاق الصحيح."},
-    {title:"✨ أحسنــتِ!", text:"واضح إن عندك عين سايبر."},
-  ];
-  const failMsgs = [
-    "قريبة… بس مو هي!",
-    "غلط — راجعي الجزء الأول.",
-    "مممم لا، راجعي تركيب SDC{}"
-  ];
-
-  const successGifs = [
-    "https://media.giphy.com/media/26tPplGWjN0xLybiU/giphy.gif",
-    "https://media.giphy.com/media/3o7TKx2aPq0QKQh6Uy/giphy.gif"
-  ];
-  const failGifs = [
-    "https://media.giphy.com/media/14uQ3cOFteDaU/giphy.gif",
-    "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
-  ];
-
-  function pushConsole(msg){
-    consoleText.textContent += "\n> " + msg;
-    consoleText.parentElement.scrollTop = consoleText.parentElement.scrollHeight;
-  }
-
-  function showSuccess(){
-    const pick = successMsgs[Math.floor(Math.random()*successMsgs.length)];
-    status.className = "status success";
-    status.innerHTML = `<div class="big">${pick.title}</div><div class="small">${pick.text}</div>`;
-    memeArea.innerHTML = `<img src="${successGifs[Math.floor(Math.random()*successGifs.length)]}">`;
-    pushConsole("✔️ فلاق صحيح!");
-  }
-
-  function showFail(){
-    const pick = failMsgs[Math.floor(Math.random()*failMsgs.length)];
-    status.className = "status fail";
-    status.innerHTML = `<div class="big">❌ غلط!</div><div class="small">${pick}</div>`;
-    memeArea.innerHTML = `<img src="${failGifs[Math.floor(Math.random()*failGifs.length)]}">`;
-    pushConsole("❌ الفلاق غير صحيح");
-
-    if(tries === 3){
-      pushConsole("💡 هنت: الفلاق فيه كلمة DEFENDER");
+    if (input === "") {
+        msg.textContent = "وش ذا؟ اكتب شي أول 😂";
+        msg.style.color = "#ffea00";
+        return;
     }
-  }
 
-  function checkFlag(){
-    const v = input.value.trim();
-    if(!v){ pushConsole("اكتبي شي أول 😅"); return; }
-    tries++;
-    if(v === FLAG){ showSuccess(); }
-    else{ showFail(); }
-  }
+    if (input === CONFIG.FLAG) {
+        msg.textContent = "🔥 صح عليك! واضح انك محترفة";
+        msg.style.color = "#00ff88";
+    } else {
+        msg.textContent = "❌ غلط! شكله الفلاق ينحاش منك 😭";
+        msg.style.color = "#ff4d4d";
 
-  btn.onclick = checkFlag;
-  input.onkeydown = e => { if(e.key === "Enter") checkFlag(); };
+        // هزة خفيفة عند الخطأ
+        document.querySelector(".box").style.animation = "shake 0.3s";
 
-  showTextBtn.onclick = ()=>{
-    revealText.style.display = revealText.style.display === "block" ? "none" : "block";
-    revealText.textContent = CONFIG.BUTTON_TEXT_CONTENT;
-  }
-  openWebBtn.onclick = ()=> window.open(CONFIG.BUTTON_WEB_URL,"_blank");
-  openImgBtn.onclick = ()=> window.open(CONFIG.BUTTON_IMAGE_URL,"_blank");
-
-  pushConsole("💬 تلميح: الفلاق يبدأ بـ SDC{ ومكوّن من 3 أجزاء }");
-})();
+        setTimeout(() => {
+            document.querySelector(".box").style.animation = "";
+        }, 300);
+    }
+}
 </script>
 
-<!-- Matrix Rain -->
-<script>
-const canvas = document.getElementById('matrixCanvas');
-const ctx = canvas.getContext('2d');
-let w, h, drops = [];
-const letters = '01';
-
-function resize(){
-  canvas.width = w = canvas.clientWidth;
-  canvas.height = h = canvas.clientHeight;
-  const columns = Math.floor(w / 12);
-  drops = Array(columns).fill(0).map(()=>Math.random()*h);
+<style>
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+    100% { transform: translateX(0); }
 }
-
-function draw(){
-  ctx.fillStyle = 'rgba(2,2,4,0.08)';
-  ctx.fillRect(0,0,w,h);
-  ctx.fillStyle = 'rgba(0,255,153,0.15)';
-  ctx.font = '12px monospace';
-
-  drops.forEach((y,i)=>{
-    const text = letters[Math.floor(Math.random()*letters.length)];
-    ctx.fillText(text, i*12, y);
-    drops[i] = y > h && Math.random() > 0.975 ? 0 : y + 12;
-  });
-
-  requestAnimationFrame(draw);
-}
-
-resize();
-window.addEventListener('resize', resize);
-draw();
-</script>
+</style>
 
 </body>
 </html>
