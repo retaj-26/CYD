@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SDC — CTF Challenge</title>
+<title>SDC — Cyber Challenge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#030305;
+    --bg:#030305
     --panel:#071017;
     --neon-green: #00ff99;
     --neon-purple: #8b5cf6;
@@ -101,11 +101,11 @@
         </div>
 
         <div class="input-area" style="margin-top:12px">
-          <input id="flagInput" type="text" placeholder="اكتب الفلاقز هنا..." aria-label="flag input" autocomplete="off" />
+          <input id="flagInput" type="text" placeholder="SDC{1_2_3}" aria-label="flag input" autocomplete="off" />
           <button id="submitBtn" class="btn">تحقق</button>
         </div>
 
-        <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45)"> 😉</div>
+        <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45)"> 🧠⌖</div>
 
         <!-- أزرار التخصيص الثلاثة -->
         <div class="actions" style="margin-top:14px">
@@ -120,8 +120,8 @@
 
       <aside class="right panel" aria-label="status panel">
         <div id="statusBox" class="status" role="status" aria-live="polite">
-          <div class="big">جاهزة للتحقق...</div>
-          <div class="small">SDC{1_2_3_}</div>
+          <div class="big">جاهز للتحقق...</div>
+          <div class="small">أدخل الفلاقز واضغط "تحقق"</div>
         </div>
 
         <div id="memeArea" class="meme" aria-hidden="false"></div>
@@ -134,15 +134,17 @@
 
 <script>
 
+// ========== إعدادات سهلة للتعديل (غير الروابط/النص هنا) ===========
 const CONFIG = {
   FLAG: "SDC{Cyber_DEFENDER_31s}",
+  // زر الموقع: غيّر الرابط هنا
   BUTTON_WEB_URL: "https://retaj-26.github.io/31_web/",
+  // زر الصورة: غيّر رابط الصورة هنا
   BUTTON_IMAGE_URL: "https://imgur.com/a/PTN218S",
+  // زر النص: غيّر النص الذي يظهر
   BUTTON_TEXT_CONTENT: "SDC{Part_2_is_ -.. . ..-. . -. -.. . .-.}",
 };
-
-};
-
+// ==================================================================
 
 (function(){
   const FLAG = CONFIG.FLAG;
@@ -159,8 +161,8 @@ const CONFIG = {
 
   // رسائل
   const successMsgs = [
-    {title:"كفووو عليكم يا بطلات السايبر! 🔥", text:"هذي هي الفلاقز الصح — تدريب ممتاز!"},
-    {title:"حيييكم! 👏", text:" فخورين فيكم سايبر قيرلز    "}
+    {title:"كفووو عليكم يا ابطال السايبر! 🔥", text:"هذي هي الفلاقز الصح — تدريب ممتاز!"},
+    {title:"حيييكم! 👏", text:" فخورين فيكم يالمدافعيين     "}
   ];
   const failMsgs = ["غلط ي الحبيب، جرّب مرّة ثانية","مو كذا، ركّز في الحروف والمسافات"];
 
@@ -190,7 +192,7 @@ const CONFIG = {
   function showFail(){
     status.className = "status fail";
     const msg = failMsgs[Math.floor(Math.random()*failMsgs.length)];
-    status.innerHTML = '<div class="big">غلط! 😭</div>' + '<div class="small">'+ msg +'</div>';
+    status.innerHTML = '<div class="big">غلط! ): </div>' + '<div class="small">'+ msg +'</div>';
     memeArea.innerHTML = '<img alt="fail gif" src="'+ failGifs[Math.floor(Math.random()*failGifs.length)] +'">';
     pushConsole("فلاقز غير صحيح ❌");
   }
@@ -222,11 +224,11 @@ const CONFIG = {
     pushConsole('تم فتح الصورة في تبويب جديد.');
   });
 
-pushConsole("تلميح: الفلاقز يبدأ بـ SDC{مقسمة لثلاثة اجزاء}");
+  pushConsole("تلميح: الفلاقز يبدأ بـ SDC{مقسمة لثلاثة اجزاء}");
 
 })();
 
-// ========== matrix rain  ==========
+// ========== matrix rain ==========
 (function(){
   const canvas = document.getElementById('matrixCanvas');
   const ctx = canvas.getContext('2d');
