@@ -8,300 +8,258 @@
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#030305;
-    --panel:#071017;
-    --neon-green:#00ff99;
-    --neon-purple:#8b5cf6;
-    --accent:linear-gradient(90deg,var(--neon-green),var(--neon-purple));
-    --text:#dfeef2;
+    --bg: #030305;
+    --panel: #071017;
+    --neon-green: #00ff99;
+    --neon-purple: #8b5cf6;
+    --accent: linear-gradient(90deg,var(--neon-green), var(--neon-purple));
+    --text: #dfeef2;
     --muted:rgba(223,238,242,0.12);
   }
-  *{box-sizing:border-box;margin:0;padding:0}
+  *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    height:100%;min-height:100vh;background:var(--bg);color:var(--text);
-    font-family:'Cairo','Share Tech Mono',monospace;
-    display:flex;align-items:center;justify-content:center;padding:28px;
+    margin:0;padding:28px;font-family: 'Cairo', 'Share Tech Mono', monospace;background:var(--bg);color:var(--text);
+    -webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;
   }
 
-  .card{
-    width:100%;max-width:980px;border-radius:18px;padding:24px;position:relative;
-    background:rgba(255,255,255,0.015);
-    border:1px solid rgba(255,255,255,0.03);
-    box-shadow:0 12px 48px rgba(0,0,0,0.65);
-    overflow:hidden;
-  }
+  .card{width:100%;max-width:980px;border-radius:14px;padding:22px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 48px rgba(2,6,23,0.8);position:relative;overflow:hidden}
+
   #matrixCanvas{position:absolute;inset:0;z-index:0;opacity:0.08;pointer-events:none}
-  .header{position:relative;z-index:2;display:flex;gap:14px;align-items:center;margin-bottom:18px}
-  .logo{
-    width:64px;height:64px;display:flex;align-items:center;justify-content:center;
-    border-radius:12px;background:rgba(255,255,255,0.02);
-    border:1px solid rgba(255,255,255,0.04);
-    box-shadow:0 0 22px rgba(0,255,153,0.05);
-  }
-  .logo .text{color:var(--neon-green);font-family:'Share Tech Mono';font-size:15px;font-weight:700}
-  h1{font-size:22px;margin:0}
-  p.lead{font-size:13px;color:rgba(223,238,242,0.85)}
-  .content{position:relative;z-index:2;display:flex;gap:24px}
+
+  .content{position:relative;z-index:2;display:flex;gap:20px;align-items:flex-start}
   .left{flex:1}
-  .right{width:350px;display:flex;flex-direction:column;gap:14px}
-  .console{
-    background:rgba(0,0,0,0.4);
-    border-radius:10px;padding:16px;height:340px;overflow:auto;
-    border:1px solid rgba(0,255,153,0.05);
-    backdrop-filter:blur(4px);
+  .right{width:360px}
+
+  .header{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+  .logo{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;background:transparent;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 30px rgba(139,92,246,0.06);padding:6px}
+  .logo .text{font-family:'Share Tech Mono', monospace;color:var(--neon-green);text-shadow:0 6px 28px rgba(0,255,153,0.06)}
+  h1{margin:0;font-size:20px}
+  p.lead{margin:0;color:rgba(223,238,242,0.9);opacity:0.95;font-size:13px}
+
+  .console{background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(255,255,255,0.005));border-radius:10px;padding:16px;height:340px;overflow:auto;border:1px solid rgba(0,255,153,0.04)}
+  .console pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.5;font-family:'Share Tech Mono', monospace}
+
+  .input-area{display:flex;gap:8px;margin-top:12px}
+  input[type="text"]{flex:1;padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(0,0,0,0.45);color:var(--text);outline:none;font-family:inherit}
+  .btn{padding:10px 14px;border-radius:8px;border:none;cursor:pointer;background:var(--accent);color:#021022;font-weight:700;box-shadow:0 8px 28px rgba(124,58,237,0.08);transition:transform .12s ease,box-shadow .12s}
+  .btn:active{transform:translateY(1px)}
+
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.004));border-radius:10px;padding:14px;height:340px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:flex-start;border:1px solid rgba(255,255,255,0.02)}
+  .status{width:100%;padding:12px;border-radius:8px;background:rgba(0,0,0,0.35);text-align:center}
+  .status.success{box-shadow:0 12px 40px rgba(0,255,153,0.04);border:1px solid rgba(0,255,153,0.08)}
+  .status.fail{box-shadow:0 12px 40px rgba(255,80,80,0.04);border:1px solid rgba(255,80,80,0.06)}
+  .big{font-size:16px;font-weight:800;color:var(--neon-green)}
+  .small{font-size:13px;color:rgba(223,238,242,0.85);margin-top:6px}
+
+  .meme img{max-width:100%;border-radius:8px;display:block;max-height:140px;object-fit:cover}
+  .footer{font-size:12px;color:rgba(255,255,255,0.28);text-align:center;margin-top:auto;width:100%}
+
+  .actions{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px}
+  .action-btn{padding:10px 12px;border-radius:8px;border:1px solid var(--muted);background:transparent;color:var(--text);cursor:pointer;min-width:110px}
+  .action-btn.neon{background:linear-gradient(90deg, rgba(0,255,153,0.06), rgba(139,92,246,0.05));box-shadow:0 8px 28px rgba(0,255,153,0.03)}
+
+  .reveal{margin-top:10px;padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);display:none}
+
+  @media(max-width:900px){
+    .content{flex-direction:column}
+    .right{width:100%}
+    .console{height:300px}
+    .panel{height:auto}
   }
-  .console pre{white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.5;font-family:'Share Tech Mono'}
-  .input-area{margin-top:12px;display:flex;gap:10px}
-  input[type="text"]{
-    flex:1;padding:12px;border-radius:8px;
-    background:rgba(0,0,0,0.55);
-    border:1px solid rgba(255,255,255,0.05);
-    color:var(--text);outline:none;
-  }
-  input:focus{box-shadow:0 6px 20px rgba(139,92,246,0.06);border-color:rgba(139,92,246,0.28)}
-  .btn{
-    padding:10px 18px;border-radius:8px;border:none;cursor:pointer;
-    background:var(--accent);color:#021022;font-weight:700;
-    box-shadow:0 6px 22px rgba(0,255,153,0.12);
-    transition:.12s;
-  }
-  .btn:active{transform:translateY(2px)}
-  .right .panel{
-    background:rgba(255,255,255,0.02);
-    border-radius:12px;padding:18px;
-    border:1px solid rgba(255,255,255,0.03);
-  }
-  .status{text-align:center;padding:12px;border-radius:8px;background:rgba(0,0,0,0.45)}
-  .status.success{border:1px solid rgba(0,255,153,0.1);box-shadow:0 0 18px rgba(0,255,153,0.08)}
-  .status.fail{border:1px solid rgba(255,80,80,0.1);box-shadow:0 0 18px rgba(255,80,80,0.08)}
-  .big{font-size:16px;color:var(--neon-green);font-weight:800}
-  .small{font-size:13px;color:rgba(223,238,242,0.85)}
-  .meme img{width:100%;max-height:150px;border-radius:8px;object-fit:cover;margin-top:10px}
-  .meme .err{margin-top:10px;font-size:13px;color:rgba(255,255,255,0.5);text-align:center}
-  .actions{display:flex;gap:10px;margin-top:12px}
-  .action-btn{
-    padding:10px 12px;border-radius:8px;cursor:pointer;
-    background:rgba(0,0,0,0.35);color:var(--text);
-    border:1px solid var(--muted);transition:.12s;
-  }
-  .action-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(139,92,246,0.06)}
-  .reveal{margin-top:10px;padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);display:none}
-  .footer{text-align:center;font-size:12px;color:rgba(255,255,255,0.25);margin-top:auto}
-  @media(max-width:900px){.content{flex-direction:column}.right{width:100%}.console{height:260px}}
+
+  .action-btn:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(139,92,246,0.04)}
+
+  .typing {border-right:2px solid rgba(255,255,255,0.12);animation:blink .9s steps(1) infinite}
+  @keyframes blink{50%{border-color:transparent}}
 </style>
 </head>
 <body>
-<div class="card" role="main" aria-labelledby="title">
-  <canvas id="matrixCanvas" aria-hidden="true"></canvas>
-  <div class="header" role="banner">
-    <div class="logo" aria-hidden="true"><div class="text">{SDC}</div></div>
-    <div><h1 id="title">CTF Challenge</h1><p class="lead">أدخل الفلاقز وحاول تثبت نفسك ⚡</p></div>
-  </div>
+  <div class="card" role="main" aria-labelledby="title">
+    <canvas id="matrixCanvas" aria-hidden="true"></canvas>
 
-  <div class="content">
-    <div class="left">
-      <div class="console" id="console" aria-live="polite"><pre id="consoleText">تنبيه: الفلاق حساس للحروف والمسافات.</pre></div>
-
-      <div class="input-area" aria-label="إدخال الفلاق">
-        <input id="flagInput" type="text" placeholder="SDC{1_2_3}" aria-label="حقل الفلاق" />
-        <button id="submitBtn" class="btn" aria-label="تحقق من الفلاق">تحقق</button>
+    <div class="header">
+      <div class="logo" aria-hidden="true">
+        <div class="text">{SDC}</div>
       </div>
-
-      <div class="actions" role="group" aria-label="الأزرار">
-        <button id="showTextBtn" class="action-btn" aria-pressed="false">عرض النص</button>
-        <button id="openWebBtn" class="action-btn">فتح موقع</button>
-        <button id="openImgBtn" class="action-btn">عرض صورة</button>
+      <div>
+        <h1 id="title">CTF Challenge</h1>
+        <p class="lead">أدخل الفلاقز في الصندوق وحاول تثبت نفسك كـ مدافع سيبراني 🌐⚡</p>
       </div>
-
-      <div id="revealText" class="reveal" aria-live="polite"></div>
     </div>
 
-    <div class="right panel" aria-label="لوحة الحالة">
-      <div id="statusBox" class="status" role="status" aria-live="polite">
-        <div class="big">جاهز للتحقق...</div>
-        <div class="small">أدخل الفلاق واضغط تحقق</div>
+    <div class="content">
+      <div class="left">
+        <div class="console" id="console" aria-live="polite">
+          <pre id="consoleText"> إذا جبت الفلاق الصحيح، سلّمه في موقع التحديات 🎯 <br> تنبيه: الفلاقز حساس للحروف والمسافات — تأكد من النسخ الدقيق.</pre>
+        </div>
+
+        <div class="input-area" style="margin-top:12px">
+          <input id="flagInput" type="text" placeholder="SDC{1_2_3}" aria-label="flag input" autocomplete="off" />
+          <button id="submitBtn" class="btn">تحقق</button>
+        </div>
+
+        <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45)"> 🧠⌖</div>
+
+        <div class="actions" style="margin-top:14px">
+          <button id="showTextBtn" class="action-btn neon">عرض النص</button>
+          <button id="openWebBtn" class="action-btn">افتح موقع</button>
+          <button id="openImgBtn" class="action-btn">عرض الصورة</button>
+        </div>
+
+        <div id="revealText" class="reveal" aria-live="polite"></div>
+
       </div>
-      <div id="memeArea" class="meme" aria-hidden="false"></div>
-      <div class="footer">SDC • تصميم هاكري للتدريب</div>
+
+      <aside class="right panel" aria-label="status panel">
+        <div id="statusBox" class="status" role="status" aria-live="polite">
+          <div class="big">جاهز للتحقق...</div>
+          <div class="small">أدخل الفلاقز واضغط "تحقق"</div>
+        </div>
+
+        <div id="memeArea" class="meme" aria-hidden="false"></div>
+
+        <div class="footer">SDC • تصميم بـروح هاكرية للمُتعة والتدريب</div>
+      </aside>
+
     </div>
   </div>
-</div>
 
 <script>
-/* ======= CONFIG (ممنوع تغيير الروابط إذا ما طلبت) ======= */
-const CONFIG={
-  FLAG:"SDC{Cyber_DEFENDER_31s}",
-  BUTTON_WEB_URL:"https://retaj-26.github.io/31_web/",
-  BUTTON_IMAGE_URL:"https://imgur.com/a/j5Vc0j3",
-  BUTTON_TEXT_CONTENT:"SDC{Part_2_is_ -.. . ..-. . -. -.. . .-.}",
-  SUCCESS_GIFS:[
-    "https://media.giphy.com/media/26tPplGWjN0xLybiU/giphy.gif",
-    "https://media.giphy.com/media/3o7TKx2aPq0QKQh6Uy/giphy.gif"
-  ],
-  FAIL_GIFS:[
-    "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif",
-    "https://media.giphy.com/media/14uQ3cOFteDaU/giphy.gif"
-  ]
+
+const CONFIG = {
+  FLAG: "SDC{Cyber_DEFENDER_31s}",
+  BUTTON_WEB_URL: "https://retaj-26.github.io/31_web/",
+  BUTTON_IMAGE_URL: "https://imgur.com/a/j5Vc0j3",
+  BUTTON_TEXT_CONTENT: "SDC{Part_2_is_ -.. . ..-. . -. -.. . .-.}",
 };
 
-/* ======= اختصارات ======= */
-const $ = id => document.getElementById(id);
-const consoleText = $('consoleText');
-const consoleBox = $('console');
+(function(){
+  const FLAG = CONFIG.FLAG;
+  const input = document.getElementById('flagInput');
+  const btn = document.getElementById('submitBtn');
+  const status = document.getElementById('statusBox');
+  const memeArea = document.getElementById('memeArea');
+  const consoleText = document.getElementById('consoleText');
+  const showTextBtn = document.getElementById('showTextBtn');
+  const openWebBtn = document.getElementById('openWebBtn');
+  const openImgBtn = document.getElementById('openImgBtn');
+  const revealText = document.getElementById('revealText');
+  let tries = 0;
+  
+const successMsgs = [
+  {
+    title: "يا عيني! شغل نظييف 🔥",
+    text: "جبت الفلاق صح… واضح إنك فاهم اللعبه!"
+  },
+  {
+    title: "والنعم بالله! 👏",
+    text: "قدّها وقدود… مدافع سايبر ما يمزح!"
+  }
+];
 
-/* ======= تسجيل في الـ console داخل الصفحة ======= */
-function log(msg){
-  const now = new Date().toLocaleTimeString();
-  consoleText.textContent += `\n[${now}] > ${msg}`;
-  consoleBox.scrollTop = consoleBox.scrollHeight;
-}
+const failMsgs = [
+  "وش ذا بالله؟ 😂 جرّب مرّة ثانية",
+  "لااا مو كذا! ركّز شوي وبتضبط"
+];
 
-/* ======= تحميل مسبق للـ GIFs (يعطي انطباع أسرع) ======= */
-function preloadImages(urls, onComplete){
-  let loaded = 0;
-  const imgs = [];
-  if(!urls || !urls.length){ onComplete(imgs); return; }
-  urls.forEach((u, i) => {
-    const im = new Image();
-    im.onload = im.onerror = () => {
-      loaded++;
-      if(loaded === urls.length) onComplete(imgs);
-    };
-    im.src = u;
-    imgs[i] = im;
+  const successGifs = [
+    "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3NjEzYmU3eDkxMGtnYWV2MmV3cWJoeGV0MDU5dXYxY2lncHRueWZvZyZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/4es2i8coJlois/giphy.gif",
+    "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdDB2czV1Njg2ZnVibHZrcHk0aG82MG9uYzZkZzNsczluMTY2YjhndiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l4JySAWfMaY7w88sU/giphy.gif"
+  ];
+  const failGifs = [
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaWJreG81eXg5N3o3dXA3ZWw4Y3Bicjk1NHBianl4enQyYW0xNWI3MCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/VL48WGMDjD64umCEkv/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExam1xNWZqNWZncXMyNnI2MDJpYW95MTI2NXZxbzVoaW11M2cydzBiYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/80TEu4wOBdPLG/giphy.gif"
+  ];
+
+  function pushConsole(line){
+    consoleText.textContent = consoleText.textContent + "\n> " + line;
+    const c = document.getElementById('console');
+    c.scrollTop = c.scrollHeight;
+  }
+
+  function showSuccess(){
+    status.className = "status success";
+    const pick = successMsgs[Math.floor(Math.random()*successMsgs.length)];
+    status.innerHTML = '<div class="big">'+ pick.title +'</div>' + '<div class="small">'+ pick.text +'</div>';
+    memeArea.innerHTML = '<img alt="success gif" src="'+ successGifs[Math.floor(Math.random()*successGifs.length)] +'">';
+    pushConsole("فلاقز تم التحقق: صحيح ✅");
+  }
+
+  function showFail(){
+    status.className = "status fail";
+    const msg = failMsgs[Math.floor(Math.random()*failMsgs.length)];
+    status.innerHTML = '<div class="big">غلط! ): </div>' + '<div class="small">'+ msg +'</div>';
+    memeArea.innerHTML = '<img alt="fail gif" src="'+ failGifs[Math.floor(Math.random()*failGifs.length)] +'">';
+    pushConsole("فلاقز غير صحيح ❌");
+  }
+
+  function checkFlag(){
+    const val = input.value.trim();
+    if(!val){pushConsole("اكتب شي أول بعدين تحقق 😅");return}
+    tries++;
+    if(val === FLAG){showSuccess();} else {showFail();}
+  }
+
+  btn.addEventListener('click', checkFlag);
+  input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ checkFlag(); } });
+
+  showTextBtn.addEventListener('click', ()=>{
+    revealText.style.display = (revealText.style.display === 'block') ? 'none' : 'block';
+    revealText.textContent = CONFIG.BUTTON_TEXT_CONTENT;
+    pushConsole('تم عرض النص من الزر.');
   });
-}
 
-/* ======= دالة لتحديث حالة اللوحة مع تحقق تحميل الصورة ======= */
-function updateStatus(type, title, text, gifUrl){
-  const box = $('statusBox');
-  box.className = 'status ' + type;
-  box.innerHTML = `<div class="big">${title}</div><div class="small">${text}</div>`;
-  const meme = $('memeArea');
-  meme.innerHTML = ''; // تفريغ
-  if(!gifUrl){
-    meme.innerHTML = '';
-    return;
-  }
-  // نجرب نحمّل الصورة ونعرضها أو نعرض رسالة خطأ إذا فشلت
-  const img = new Image();
-  img.onload = () => {
-    img.alt = title;
-    img.setAttribute('role','img');
-    meme.appendChild(img);
-  };
-  img.onerror = () => {
-    const e = document.createElement('div');
-    e.className = 'err';
-    e.textContent = 'تعذر تحميل الصورة. افتحها في التبويب.';
-    meme.appendChild(e);
-  };
-  img.src = gifUrl;
-}
-
-/* ======= أحداث الأزرار والسلوك ======= */
-$('submitBtn').addEventListener('click', () => {
-  const val = $('flagInput').value.trim();
-  if(!val){ log('اكتب شي قبل التحقق!'); return; }
-
-  log('جاري التحقق من الفلاق...');
-  if(val === CONFIG.FLAG){
-    const gif = CONFIG.SUCCESS_GIFS[Math.floor(Math.random()*CONFIG.SUCCESS_GIFS.length)];
-    updateStatus('success','نجح التحقق! 🔥','هذي هي الفلاقز الصح — تدريب ممتاز!', gif);
-    log('فلاق صحيح ✅');
-  } else {
-    const gif = CONFIG.FAIL_GIFS[Math.floor(Math.random()*CONFIG.FAIL_GIFS.length)];
-    updateStatus('fail','غلط! ):', 'مو كذا، جرّب مرّة ثانية', gif);
-    log('فلاق خاطئ ❌');
-  }
-});
-
-// دعم الضغط Enter
-$('flagInput').addEventListener('keydown', (e) => {
-  if(e.key === 'Enter') $('submitBtn').click();
-});
-
-// زر عرض النص (يستخدم textContent للحماية)
-$('showTextBtn').addEventListener('click', () => {
-  const box = $('revealText');
-  const shown = box.style.display === 'block';
-  box.style.display = shown ? 'none' : 'block';
-  box.textContent = CONFIG.BUTTON_TEXT_CONTENT;
-  $('showTextBtn').setAttribute('aria-pressed', !shown);
-  log('تم ' + (shown ? 'إخفاء' : 'عرض') + ' النص.');
-});
-
-// فتح الموقع (يفتح في تبويب جديد)
-$('openWebBtn').addEventListener('click', () => {
-  try{
+  openWebBtn.addEventListener('click', ()=>{
     window.open(CONFIG.BUTTON_WEB_URL, '_blank');
-    log('تم فتح الموقع في تبويب جديد.');
-  }catch(e){
-    log('فشل فتح الموقع — حاول نسخه ولصقه يدوياً.');
-  }
-});
+    pushConsole('تم فتح الموقع في تبويب جديد.');
+  });
 
-// فتح رابط الصورة (يُبقي الرابط كما هو)
-$('openImgBtn').addEventListener('click', () => {
-  try{
+  openImgBtn.addEventListener('click', ()=>{
     window.open(CONFIG.BUTTON_IMAGE_URL, '_blank');
-    log('تم فتح رابط الصورة في تبويب جديد.');
-  }catch(e){
-    log('فشل فتح رابط الصورة — حاول نسخه ولصقه يدوياً.');
-  }
-});
+    pushConsole('تم فتح الصورة في تبويب جديد.');
+  });
 
-/* ======= preload GIFs لتحسين التجربة ======= */
-preloadImages(CONFIG.SUCCESS_GIFS.concat(CONFIG.FAIL_GIFS), () => {
-  log('الـ GIFs جاهزة للعرض (محملة مسبقاً أو انتهى التحميل).');
-});
+  pushConsole("تلميح: الفلاقز يبدأ بـ SDC{مقسمة لثلاثة اجزاء}");
 
-/* ======= Matrix rain canvas محسّن ======= */
-(function matrix(){
-  const canvas = $('matrixCanvas');
+})();
+
+(function(){
+  const canvas = document.getElementById('matrixCanvas');
   const ctx = canvas.getContext('2d');
-  let width = 0, height = 0, drops = [], cols = 0;
-  const letterSize = 12;
-
+  let w, h;
+  const letters = '01';
+  let columns;
   function resize(){
-    // حساب الدقة لتقليل الضبابية على شاشات عالية DPI
-    const rect = canvas.getBoundingClientRect();
-    const ratio = window.devicePixelRatio || 1;
-    width = rect.width;
-    height = rect.height;
-    canvas.width = Math.floor(width * ratio);
-    canvas.height = Math.floor(height * ratio);
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
-    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-    cols = Math.max(2, Math.floor(width / letterSize));
-    drops = new Array(cols).fill(0).map(() => Math.random() * height);
+    canvas.width = w = canvas.clientWidth;
+    canvas.height = h = canvas.clientHeight;
+    columns = Math.floor(w / 12);
+    drops = new Array(columns).fill(0).map(()=>Math.random()*h);
   }
-
+  let drops = [];
   function draw(){
     ctx.fillStyle = 'rgba(3,3,5,0.06)';
-    ctx.fillRect(0,0,width,height);
+    ctx.fillRect(0,0,w,h);
     ctx.fillStyle = 'rgba(0,255,153,0.15)';
-    ctx.font = `${letterSize}px monospace`;
-
+    ctx.font = '12px monospace';
     for(let i=0;i<drops.length;i++){
-      const ch = Math.random() < 0.5 ? '0' : '1';
-      ctx.fillText(ch, i * letterSize, drops[i]);
-      if(drops[i] > height && Math.random() > 0.975) drops[i] = 0;
-      drops[i] += letterSize;
+      const text = letters[Math.floor(Math.random()*letters.length)];
+      ctx.fillText(text, i*12, drops[i]);
+      if(drops[i] > h && Math.random() > 0.975) drops[i] = 0;
+      drops[i] += 12;
     }
     requestAnimationFrame(draw);
   }
-
-  window.addEventListener('resize', () => { resize(); });
   resize();
+  window.addEventListener('resize', resize);
   draw();
 })();
-
-/* ======= ملاحظة أخيرة ======= */
-log('جاهز — ادخل الفلاق واضغط تحقق. جميع الأزرار تفتح الروابط كما هي ولا يتم تغييرها.');
-</script>
+</script>   
+         
+  <footer style="text-align:center; color:#999; font-size:14px; margin-top:40px; padding:20px 0;">
+  <p>إذا جبت الفلاق الصحيح، سلّمه في موقع التحديات 🎯</p>
+  <p>🤍 Made by Retaj Alharbi 🤍</p>
+</footer>
+        
 </body>
 </html>
